@@ -1,13 +1,23 @@
-from django.urls import path
+from django.db import router
+from django.urls import path, include
+from requests import delete
+from rest_framework import routers
 
-from .views import UserView, UserDetailView, UserCreateView, UserUpdateView, UserDeleteView, UserZView
+from users.views import UserUpdateView, UserListAPIView, UserCreateView, LocationViewSet, UserDestroyAPIView
+
+simple_router = routers.SimpleRouter()
+simple_router.register('location', LocationViewSet)
 
 urlpatterns = [
-    path('users/', UserView.as_view(), name='users'),
-    path('users/<int:pk>/', UserDetailView.as_view(), name='users-detail'),
-    path('users/create/', UserCreateView.as_view(), name='users-create'),
+    # path('', include(simple_router.urls)),
+    path('users/', UserListAPIView.as_view()),
+    path('users/<int:pk>/', UserUpdateView.as_view()),
+    path('users/create/', UserCreateView.as_view()),
     path('users/<int:pk>/update/', UserUpdateView.as_view(), name='users-update'),
-    path('users/<int:pk>/delete/', UserDeleteView.as_view(), name='users-delete'),
-    path('users/Z/', UserZView.as_view(), name='users-Z'),
+    path('users/<int:pk>/', UserDestroyAPIView.as_view()),
+
 
 ]
+
+urlpatterns += simple_router.urls
+

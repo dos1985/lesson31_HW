@@ -13,7 +13,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="d8462c86-55d1-469b-9f29-f724e60caa9d">
-      <console name="Connection" type="STANDARD" schema="postgres_28hw" session="Main" />
+      <console name="Connection" type="STANDARD" schema="postgres_28hw" session="Main"><![CDATA[select * from "users_user"]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -23,7 +23,11 @@
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="d8462c86-55d1-469b-9f29-f724e60caa9d" dataset="public.users_user" active-filter-id="" />
     <filter-actions connection-id="d8462c86-55d1-469b-9f29-f724e60caa9d" dataset="public.users_user_location" active-filter-id="" />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
@@ -509,5 +513,8 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
   </component>
 </project>
