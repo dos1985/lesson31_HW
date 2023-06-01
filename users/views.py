@@ -11,7 +11,8 @@ DestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from users.models import User, Location
-from users.serializers import UserSerializer, UserUpdateSerializer, UserCreateSerializer, UserDestroySerializer, LocationSerializer
+from users.serializers import UserSerializer, UserDestroySerializer, \
+    LocationSerializer, UserCreateUpdateSerializer
 
 
 class UserListAPIView(ListAPIView):
@@ -26,12 +27,12 @@ class UserDetailView(RetrieveAPIView):
 
 class UserUpdateView(RetrieveUpdateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserUpdateSerializer
+    serializer_class = UserCreateUpdateSerializer
 
 
 class UserCreateView(CreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserCreateSerializer
+    serializer_class = UserCreateUpdateSerializer
 
 
 class UserDestroyAPIView(DestroyAPIView):

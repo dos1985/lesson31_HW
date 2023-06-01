@@ -1,5 +1,8 @@
 
 from rest_framework import serializers, status
+from rest_framework.relations import SlugRelatedField
+from rest_framework.serializers import ModelSerializer
+
 from users.models import User, Location
 
 
@@ -14,75 +17,37 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     location = LocationSerializer(many=True, read_only=True)
-    locations = serializers.SlugRelatedField(
-        required=False,
-        many=True,
-        queryset=Location.objects.all(),
-        slug_field="name"
-    )
+    # locations = serializers.SlugRelatedField(
+    #     required=False,
+    #     many=True,
+    #     queryset=Location.objects.all(),
+    #     slug_field="name"
+    # )
 
     class Meta:
         model = User
-        fields = ["id", "username", "first_name", "last_name", "role", "age", "location", "locations"]
+        fields = ["id", "username", "first_name", "last_name", "role", "age", "location"]
 
 
-class UserUpdateSerializer(serializers.ModelSerializer):
-    location = serializers.SlugRelatedField(
-        required=False,
-        many=True,
-        queryset=Location.objects.all(),
-        slug_field="name"
-    )
+class UserCreateUpdateSerializer(ModelSerializer):
+    location = SlugRelatedField(slug_field="name", many=True, queryset=Location.objects.all(), required=False)
 
-    def is_valid(self, raise_exception=False):
-        self._location = self.initial_data.pop("location")
-        return super().is_valid(raise_exception=raise_exception)
-
-    def save(self):
-        user = super().save()
-
-        # Очищаем все существующие местоположения пользователя
-        user.location.clear()
-
-        # Добавляем новые местоположения
-        for location_name in self._location:
-            location_obj, _ = Location.objects.get_or_create(name=location_name)
-            user.location.add(location_obj)
-
-        # Сохраняем объект сериализатора
-        self.instance = user
-
-        return user
-
-    class Meta:
-        model = User
-        fields = '__all__'
-
-class UserCreateSerializer(serializers.ModelSerializer):
-    location = serializers.SlugRelatedField(
-        required=False,
-        many=True,
-        queryset=Location.objects.all(),
-        slug_field="name",
-    )
-
-    def is_valid(self, raise_exception=False):
-        self._locations = self.initial_data.pop("location", [])
+    def is_valid(self, *, raise_exception=False):
+        for loc_name in self.initial_data.get("location", []):
+            loc, _ = Location.objects.get_or_create(name=loc_name)
         return super().is_valid(raise_exception=raise_exception)
 
     def create(self, validated_data):
-
-        user = User.objects.create(**validated_data)
-
-        for location_name in self._locations:
-            location, _ = Location.objects.get_or_create(name=location_name)
-            user.location.add(location)
+        password = validated_data.pop('password', None)
+        user = self.Meta.model(**validated_data)
+        if password:
+            user.set_password(password)
+        user.save()
         return user
 
     class Meta:
         model = User
         fields = "__all__"
-
 
 class UserDestroySerializer(serializers.ModelSerializer):
     class Meta:

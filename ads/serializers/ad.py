@@ -1,34 +1,34 @@
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer, SlugRelatedField
 
-from ads.models.ad import Ad
-from ads.models.category import Category
+from ads.models import AdModel
+from ads.models import CategoryModel
 from users.models import User
 
 
 class AdSerializer(ModelSerializer):
     class Meta:
-        model = Ad
+        model = AdModel
         fields = "__all__"
 
 
 class AdDetailSerializer(ModelSerializer):
     author = SlugRelatedField(slug_field="username", queryset=User.objects.all())
-    category = SlugRelatedField(slug_field="name", queryset=Category.objects.all())
+    category = SlugRelatedField(slug_field="name", queryset=CategoryModel.objects.all())
     locations = SerializerMethodField()
 
     def get_locations(self, ad):
-        return [location.name for location in ad.author.locations.all()]
+        return [location.name for location in ad.author.location.all()]
 
     class Meta:
-        model = Ad
+        model = AdModel
         fields = "__all__"
 
 
 class AdListSerializer(ModelSerializer):
     author = SlugRelatedField(slug_field="username", queryset=User.objects.all())
-    category = SlugRelatedField(slug_field="name", queryset=Category.objects.all())
+    category = SlugRelatedField(slug_field="name", queryset=CategoryModel.objects.all())
 
     class Meta:
-        model = Ad
+        model = AdModel
         fields = ["id", "name", "author", "category", "price"]

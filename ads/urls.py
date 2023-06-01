@@ -4,10 +4,12 @@ from rest_framework import routers
 
 from ads.views.category import *
 from ads.views.ad import *
+from ads.views.selection import SelectionViewSet
 from myproject import settings
 
 simple_router = routers.SimpleRouter()
 simple_router.register('ad', AdViewSet)
+simple_router.register('selection', SelectionViewSet)
 
 urlpatterns = [
     path('cat/', CategoryView.as_view(), name='cat'),
@@ -15,10 +17,6 @@ urlpatterns = [
     path('cat/<int:pk>/update/', CategoryUpdateView.as_view(), name='category-update'),
     path('cat/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
     path('cat/create/', CategoryCreateView.as_view()),
-    # path('ad/', AdView.as_view(), name='ad_all'),
-    # path('ad/<int:pk>/', AdDetailView.as_view(), name='cat-detail'),
-    # path('ad/<int:pk>/update/', AdUpdateView.as_view(), name='cat-update'),
-    # path('ad/<int:pk>/delete/', AdDeleteView.as_view(), name='cat-delete'),
     path('ad/<int:pk>/upload_image/', AdImageView.as_view(), name='ad-upload-image'),
 
 ]

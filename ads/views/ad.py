@@ -1,18 +1,32 @@
-from django.http import JsonResponse, request
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
-
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-
-
 from ads.models import AdModel
-from ads.serializers import AdSerializer
+from ads.serializers.ad import AdDetailSerializer, AdListSerializer
+from ads.serializers.serializers import AdSerializer
+
 
 
 class AdViewSet(ModelViewSet):
     queryset = AdModel.objects.order_by('-price')
+
     serializer_class = AdSerializer
+    serializers_classes = {
+        "retrieve": AdDetailSerializer,
+        "list": AdListSerializer
+    }
+
+    default_permission = [AllowAny()]
+    permissions = {"retrieve": [IsAuthenticated()]}
+
+    def get_permissions(self):
+        return self.permissions.get(self.action, self.default_permission)
+
+    def get_serializer_class(self):
+        return self.serializers_classes.get(self.action, self.serializer_class)
 
     def list(self, request, *args, **kwargs):
         categories = request.GET.getlist('cat')
