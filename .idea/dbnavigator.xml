@@ -51,7 +51,7 @@
           <database value="postgres_28hw" />
           <type value="USER_PASSWORD" />
           <user value="postgres_28hw" />
-          <deprecated-pwd value="cG9zdGdyZXNfMjhodw==" />
+          <deprecated-pwd value="" />
         </database>
         <properties>
           <auto-commit value="false" />
