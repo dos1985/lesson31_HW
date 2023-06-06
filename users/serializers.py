@@ -17,12 +17,7 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     location = LocationSerializer(many=True, read_only=True)
-    # locations = serializers.SlugRelatedField(
-    #     required=False,
-    #     many=True,
-    #     queryset=Location.objects.all(),
-    #     slug_field="name"
-    # )
+
 
     class Meta:
         model = User

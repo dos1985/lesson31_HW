@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from rest_framework.response import Response
 
-from ads.models import AdModel, Selection
+from ads.models import AdModel, Selection, CategoryModel
 
 
 class AdSerializer(serializers.ModelSerializer):
@@ -8,6 +9,10 @@ class AdSerializer(serializers.ModelSerializer):
         model = AdModel
         fields = '__all__'
 
+class CatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryModel
+        fields = ["id", "name"]
 
 
 class SelectionListSerializer(serializers.ModelSerializer):

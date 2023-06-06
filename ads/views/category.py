@@ -1,113 +1,32 @@
 import json
 import pandas
 from django.http import JsonResponse
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 from ads.models import CategoryModel
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from ads.serializers.serializers import CatSerializer
 
 
+class CatViewSet(ModelViewSet):
+    queryset = CategoryModel.objects.all()
+    serializer_class = CatSerializer
 
+    def list(self, request, *args, **kwargs):
+        cat_name = request.GET.get("name", None)
+        if cat_name:
+            try:
+                queryset = self.queryset.filter(name__iexact=cat_name)
+                if not queryset.exists():
+                    return Response({"message": "Нет такой категории"}, status=404)
+            except CategoryModel.DoesNotExist:
+                return Response({"message": "Нет такой категории"}, status=404)
+        else:
+            queryset = self.queryset.all()
 
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
-
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoryView(View):
-
-    def get(self, request):
-        """Получаем все данные из категории"""
-        categories = CategoryModel.objects.all().order_by('name')
-        response = []
-        for category in categories:
-            response.append({
-                "id": category.id,
-                "name": category.name
-            })
-
-        return JsonResponse(response, safe=False)
-
-
-    def post(self, request):
-        """Пойск категории по имени"""
-        category_data = json.loads(request.body)
-        category_name = category_data["name"].lower()
-
-        try:
-            category = CategoryModel.objects.get(name__iexact=category_name)
-        except CategoryModel.DoesNotExist:
-            return JsonResponse({"message": "Нет такой категории"}, status=404)
-
-        return JsonResponse({
-            "id": category.id,
-            "name": category.name
-        })
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoryCreateView(CreateView):
-    """Создаем категорию"""
-    model = CategoryModel
-    fields = ["name"]
-
-    def post(self, request, *args, **kwargs):
-        category_data = json.loads(request.body)
-
-        category = CategoryModel.objects.create(
-            name=category_data["name"]
-        )
-
-        return JsonResponse({
-            "id": category.id,
-            "name": category.name
-        })
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoryUpdateView(UpdateView):
-    """Обновляем категорию"""
-    model = CategoryModel
-    fields = ["name"]
-
-    def post(self, request, *args, **kwargs):
-        super().post(request, *args, **kwargs)
-
-        category_data = json.loads(request.body)
-
-        self.object.name = category_data["name"]
-        self.object.save()
-
-        return JsonResponse({
-            "id": self.object.id,
-            "name": self.object.name
-        })
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoryDeleteView(DeleteView):
-    """Удаляем категорию"""
-    model = CategoryModel
-    success_url = "/"
-
-    def delete(self, request, *args, **kwargs):
-        super().delete(request, *args, **kwargs)
-        return JsonResponse({"status": "ok"}, status=200)
-
-
-class CategoryDetailView(DetailView):
-    model = CategoryModel
-
-    def get(self, request, *args, **kwargs):
-        """Получаем данные из категории по id"""
-        try:
-            category = self.get_object()
-        except CategoryModel.DoesNotExist:
-            return JsonResponse({"error": "Not found"}, status=404)
-
-        return JsonResponse({
-            "id": category.id,
-            "name": category.name
-        })
 
 
 
