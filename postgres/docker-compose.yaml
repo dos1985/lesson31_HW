@@ -6,7 +6,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres_28hw
+      POSTGRES_USER: ё
       POSTGRES_PASSWORD: postgres_28hw
       POSTGRES_DB: postgres_28hw
     restart: always

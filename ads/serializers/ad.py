@@ -31,4 +31,4 @@ class AdListSerializer(ModelSerializer):
 
     class Meta:
         model = AdModel
-        fields = ["id", "name", "author", "category", "price"]
+        fields = "__all__"
