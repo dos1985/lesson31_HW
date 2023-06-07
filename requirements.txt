@@ -8,3 +8,4 @@ psycopg2==2.9.6
 requests==2.31.0
 Pillow==9.5.0
 pytest-django==3.1.8
+drf-spectacular==0.26.2
