@@ -12,7 +12,7 @@ class AdSerializer(serializers.ModelSerializer):
 class CatSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryModel
-        fields = ["id", "name"]
+        fields = "__all__"
 
 
 class SelectionListSerializer(serializers.ModelSerializer):
