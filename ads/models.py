@@ -36,10 +36,6 @@ class AdModel(models.Model):
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='pictures', null=True, blank=True)
 
-    # def save(self, *args, **kwargs):
-    #     if self.is_published and not self.pk:
-    #         raise ValidationError("Значение поля is_published при создании объявления не может быть True.")
-    #     super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Объявление'
