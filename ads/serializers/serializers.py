@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from rest_framework.response import Response
 from ads.models import AdModel, Selection, CategoryModel
+from ads.serializers.ad import AdSerializer
 
 
-
-class AdSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AdModel
-        fields = '__all__'
+# class AdSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = AdModel
+#         fields = '__all__'
 
 
 
