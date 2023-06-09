@@ -2,17 +2,13 @@
 from rest_framework import serializers, status
 from rest_framework.relations import SlugRelatedField
 from rest_framework.serializers import ModelSerializer
-
-from users.models import User, Location
+from users.models import User, Location, validate_birth_date
 
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ['id', 'name']
-
-    # def to_representation(self, instance):
-    #     return instance.name
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,6 +28,7 @@ class UserCreateUpdateSerializer(ModelSerializer):
             loc, _ = Location.objects.get_or_create(name=loc_name)
         return super().is_valid(raise_exception=raise_exception)
 
+
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         user = self.Meta.model(**validated_data)
@@ -42,7 +39,8 @@ class UserCreateUpdateSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ["id", "username", "first_name", "last_name", "role", "age", "location", "email", "birth_date"]
+
 
 class UserDestroySerializer(serializers.ModelSerializer):
     class Meta:

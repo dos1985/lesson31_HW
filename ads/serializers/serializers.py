@@ -4,12 +4,6 @@ from ads.models import AdModel, Selection, CategoryModel
 from ads.serializers.ad import AdSerializer
 
 
-# class AdSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = AdModel
-#         fields = '__all__'
-
-
 
 class CatSerializer(serializers.ModelSerializer):
     class Meta:
