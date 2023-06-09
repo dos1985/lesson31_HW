@@ -5,14 +5,11 @@ from django.views.generic import UpdateView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from ads.models import AdModel
-from ads.serializers.ad import AdDetailSerializer, AdListSerializer
-from ads.serializers.serializers import AdSerializer
-
+from ads.serializers.ad import AdDetailSerializer, AdListSerializer, AdSerializer
 
 
 class AdViewSet(ModelViewSet):
     queryset = AdModel.objects.order_by('-price')
-
     serializer_class = AdSerializer
     serializers_classes = {
         "retrieve": AdDetailSerializer,

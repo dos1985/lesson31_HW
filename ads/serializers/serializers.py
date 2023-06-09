@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from rest_framework.response import Response
-
 from ads.models import AdModel, Selection, CategoryModel
-from validators import not_published
+
 
 
 class AdSerializer(serializers.ModelSerializer):
@@ -10,12 +9,6 @@ class AdSerializer(serializers.ModelSerializer):
         model = AdModel
         fields = '__all__'
 
-class AdCreateSerializer(serializers.ModelSerializer):
-    is_published = serializers.IntegerField(validators=[not_published])
-
-    class Meta:
-        model = AdModel
-        fields = '__all__'
 
 
 class CatSerializer(serializers.ModelSerializer):
