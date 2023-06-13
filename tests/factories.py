@@ -18,7 +18,7 @@ class CategoryFactory(factory.django.DjangoModelFactory):
         model = CategoryModel
 
     name = factory.Faker("name")
-    slug = factory.Faker("ean", length=8)
+    slug = factory.Faker("ean", length=10)
 
 
 class AdFactory(factory.django.DjangoModelFactory):

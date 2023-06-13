@@ -10,7 +10,7 @@ from users.models import User
 
 class CategoryModel(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    slug = models.CharField(max_length=10, unique=True, validators=[MinLengthValidator(5), MaxLengthValidator(10)])
+    slug = models.SlugField(max_length=10, validators=[MinLengthValidator(5)], unique=True)
 
 
     class Meta:
